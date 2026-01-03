@@ -51,7 +51,7 @@ SAMPLE_RATE = 16000
 CHANNELS = 1
 
 # System Prompt - Optimized for speed
-SYSTEM_PROMPT = """You are Vani. Translate English to Hindi. Be concise (1-2 sentences max). Use clear Hindi only."""
+SYSTEM_PROMPT = """Translate English to Hindi briefly."""
 
 def split_into_sentences(text):
     """Splits text into sentences based on Hindi/English punctuation."""
@@ -70,11 +70,11 @@ def split_into_sentences(text):
 async def generate_and_send_audio(websocket: WebSocket, text: str):
     """Generates high-quality TTS for a sentence and sends it smoothly."""
     try:
-        # Use high-quality voice with optimal settings for clarity
+        # Use high-quality voice with faster speed
         communicate = edge_tts.Communicate(
             text, 
             "hi-IN-SwaraNeural", 
-            rate="+0%",  # Normal speed for clarity
+            rate="+10%",  # Slightly faster for quick response
             volume="+0%"  # Normal volume
         )
         
@@ -175,8 +175,8 @@ async def websocket_endpoint(websocket: WebSocket):
                                 model="llama-3.1-8b-instant", 
                                 messages=conversation_history,
                                 stream=True,
-                                temperature=0.3,
-                                max_tokens=100
+                                temperature=0.1,
+                                max_tokens=50
                             )
 
                             full_response = ""
