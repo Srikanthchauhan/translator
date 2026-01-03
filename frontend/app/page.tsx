@@ -52,6 +52,22 @@ export default function Home() {
             {/* Main Content Container - Above Background */}
             <div className="z-20 flex flex-col items-center justify-center flex-1 text-center w-full max-w-md mx-auto space-y-6">
 
+                {/* Recording Status Indicator - Prominent for Firefox compatibility */}
+                {isRecording && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-red-500/90 backdrop-blur-md px-6 py-3 rounded-full shadow-lg flex items-center gap-3"
+                    >
+                        <motion.div
+                            animate={{ scale: [1, 1.2, 1] }}
+                            transition={{ repeat: Infinity, duration: 1 }}
+                            className="w-3 h-3 bg-white rounded-full"
+                        />
+                        <span className="text-white font-semibold text-sm">Recording...</span>
+                    </motion.div>
+                )}
+
                 {/* Compact Header Section - Instant Load */}
                 <div className="flex flex-col items-center space-y-3">
                     <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">

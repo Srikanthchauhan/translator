@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Microphone Test</title>
+</head>
+<body>
+    <h1>Microphone Test</h1>
+    <button onclick="testMic()">Test Microphone</button>
+    <div id="result"></div>
+    <div id="devices"></div>
+
+    <script>
+        async function testMic() {
+            const result = document.getElementById('result');
+            const devices = document.getElementById('devices');
+            
+            try {
+                // List all devices first
+                const allDevices = await navigator.mediaDevices.enumerateDevices();
+                devices.innerHTML = '<h3>All Devices:</h3>' + 
+                    allDevices.map(d => `${d.kind}: ${d.label || 'Unknown'}`).join('<br>');
+                
+                // Try to get microphone access
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                result.innerHTML = '✅ Microphone access granted!<br>' + 
+                    stream.getAudioTracks().map(t => `Track: ${t.label}`).join('<br>');
+                
+                // List devices again after permission
+                const devicesAfter = await navigator.mediaDevices.enumerateDevices();
+                const audioInputs = devicesAfter.filter(d => d.kind === 'audioinput');
+                devices.innerHTML += '<h3>Audio Inputs After Permission:</h3>' + 
+                    audioInputs.map(d => `${d.label} (${d.deviceId})`).join('<br>');
+                    
+            } catch (err) {
+                result.innerHTML = `❌ Error: ${err.name} - ${err.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

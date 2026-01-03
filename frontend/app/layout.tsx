@@ -7,6 +7,9 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
     title: 'Vani AI - Real-time English to Hindi Translator',
     description: 'Premium AI-powered voice-to-voice translator with real-time streaming',
+    icons: {
+        icon: '/favicon.svg',
+    },
 }
 
 export default function RootLayout({
