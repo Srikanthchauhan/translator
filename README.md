@@ -2,6 +2,8 @@
 
 Vani is a premium AI-powered voice-to-voice translator that seamlessly converts English speech into natural-sounding Hindi audio in real-time. It leverages advanced LLMs and TTS engines to provide a low-latency, conversational experience.
 
+🌐 **Live Demo**: https://vani-translator.vercel.app
+
 ## 🚀 Features
 
 -   **Real-time Voice Translation**: Speak in English, and Vani responds instantly in Hindi.
