@@ -68,34 +68,32 @@ def split_into_sentences(text):
     return res
 
 async def generate_and_send_audio(websocket: WebSocket, text: str):
-    """Generates TTS for a sentence and sends it immediately - optimized for speed."""
+    """Generates high-quality TTS for a sentence and sends it smoothly."""
     try:
-        # Use faster voice with optimized settings
-        communicate = edge_tts.Communicate(text, "hi-IN-SwaraNeural", rate="+10%")
-        audio_chunks = bytearray()
+        # Use high-quality voice with optimal settings for clarity
+        communicate = edge_tts.Communicate(
+            text, 
+            "hi-IN-SwaraNeural", 
+            rate="+0%",  # Normal speed for clarity
+            volume="+0%"  # Normal volume
+        )
         
-        # Stream audio immediately as it's generated
+        # Collect all audio data first for smooth playback
+        audio_data = bytearray()
+        
         async for bit in communicate.stream():
             if bit["type"] == "audio":
-                audio_chunks.extend(bit["data"])
-                # Send smaller chunks for lower latency
-                if len(audio_chunks) > 4096:
-                    await websocket.send_json({
-                        "type": "audio_chunk",
-                        "format": "mp3", 
-                        "data": base64.b64encode(audio_chunks).decode('utf-8')
-                    })
-                    audio_chunks = bytearray()
+                audio_data.extend(bit["data"])
         
-        # Send any remaining audio
-        if audio_chunks:
+        # Send complete audio in one piece for smooth playback
+        if audio_data:
             await websocket.send_json({
-                "type": "audio_chunk",
-                "format": "mp3",
-                "data": base64.b64encode(audio_chunks).decode('utf-8')
+                "type": "audio",
+                "format": "mp3", 
+                "data": base64.b64encode(audio_data).decode('utf-8')
             })
         
-        print(f"🔊 Fast TTS: {text[:20]}...")
+        print(f"🔊 Clear TTS: {text[:20]}...")
     except Exception as e:
         print(f"❌ TTS Error: {e}")
 
@@ -172,7 +170,7 @@ async def websocket_endpoint(websocket: WebSocket):
                             await websocket.send_json({"type": "transcript", "role": "user", "text": text})
                             conversation_history.append({"role": "user", "content": text})
 
-                            # 3. Ultra-fast LLM Response + Immediate TTS
+                            # 3. Ultra-fast LLM Response + High-Quality TTS
                             chat_stream = await groq_client.chat.completions.create(
                                 model="llama-3.1-8b-instant", 
                                 messages=conversation_history,
@@ -197,15 +195,15 @@ async def websocket_endpoint(websocket: WebSocket):
                                         "text": full_response
                                     })
 
-                                    # Immediate TTS on sentence completion or every 15 characters
-                                    if any(punct in content for punct in ['।', '!', '?', '|', '.', '\n']) or len(current_sentence.strip()) > 15:
+                                    # Generate TTS only on complete sentences for smooth audio
+                                    if any(punct in content for punct in ['।', '!', '?', '|', '.']):
                                         sentence_to_speak = current_sentence.strip()
-                                        if len(sentence_to_speak) > 2:
+                                        if len(sentence_to_speak) > 5:  # Longer minimum for better quality
                                             await generate_and_send_audio(websocket, sentence_to_speak)
                                             current_sentence = ""
                             
                             # Handle any remaining text
-                            if current_sentence.strip():
+                            if current_sentence.strip() and len(current_sentence.strip()) > 3:
                                 await generate_and_send_audio(websocket, current_sentence.strip())
 
                             print(f"🤖 Vani: {full_response}")
