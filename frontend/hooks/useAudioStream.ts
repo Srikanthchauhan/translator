@@ -23,10 +23,11 @@ export function useAudioStream() {
 
   // Initialize WebSocket
   const connectWebSocket = useCallback(() => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+    // Temporarily hardcode production URL for testing
+    const apiUrl = 'https://translator-gk6p.onrender.com';
     console.log('Environment API URL:', process.env.NEXT_PUBLIC_API_URL);
     console.log('Using API URL:', apiUrl);
-    const wsUrl = apiUrl.replace('http', 'ws') + '/ws/translate';
+    const wsUrl = apiUrl.replace('https', 'wss') + '/ws/translate';
     console.log('WebSocket URL:', wsUrl);
     const ws = new WebSocket(wsUrl);
     ws.binaryType = 'arraybuffer';
