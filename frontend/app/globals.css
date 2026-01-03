@@ -1,0 +1,181 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 10, 10, 10;
+  --background-end-rgb: 0, 0, 0;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+  min-height: 100vh;
+}
+
+/* Optimized glassmorphism - lighter effects */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Video background optimization */
+.video-background {
+  filter: brightness(0.7) contrast(1.1);
+}
+
+.forward-particle {
+  animation: forward-move 4s ease-out forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes forward-move {
+  0% {
+    transform: translateX(-50px) scale(0.5);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateX(calc(100vw + 50px)) scale(1);
+    opacity: 0;
+  }
+}
+
+
+/* Video visualization in circular container */
+.video-visualizer {
+  border-radius: 50%;
+  object-fit: cover;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Video effects for different states */
+.video-listening {
+  filter: brightness(1.3) saturate(1.4) hue-rotate(10deg);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+}
+
+.video-speaking {
+  filter: brightness(1.2) saturate(1.3) hue-rotate(-10deg);
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+}
+
+.video-idle {
+  filter: brightness(0.9) saturate(1.0);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+/* Beautiful Gradient Logo Circle - Clear and Sharp */
+.gradient-logo-circle {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, 
+    #00D4FF 0%, 
+    #007FFF 25%, 
+    #6A5AFF 50%, 
+    #9945FF 75%, 
+    #C45AFF 100%
+  );
+  box-shadow: 
+    0 0 30px rgba(0, 212, 255, 0.3),
+    0 0 60px rgba(106, 90, 255, 0.2),
+    inset 0 2px 20px rgba(255, 255, 255, 0.3);
+  transition: all 0.4s ease;
+  animation: logo-pulse 3s infinite ease-in-out;
+}
+
+@media (min-width: 768px) {
+  .gradient-logo-circle {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+.gradient-logo-inner {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  right: 3px;
+  bottom: 3px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.1) 30%,
+    rgba(0, 212, 255, 0.1) 70%,
+    rgba(153, 69, 255, 0.2) 100%
+  );
+}
+
+.gradient-logo-ring {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, 
+    rgba(0, 212, 255, 0.3) 0%, 
+    rgba(106, 90, 255, 0.2) 50%, 
+    rgba(201, 90, 255, 0.3) 100%
+  );
+  filter: blur(2px);
+  opacity: 0.6;
+  z-index: -1;
+}
+
+.gradient-logo-circle:hover {
+  transform: scale(1.05);
+  box-shadow: 
+    0 0 40px rgba(0, 212, 255, 0.4),
+    0 0 80px rgba(106, 90, 255, 0.3),
+    inset 0 2px 25px rgba(255, 255, 255, 0.4);
+}
+
+@keyframes logo-pulse {
+  0%, 100% {
+    box-shadow: 
+      0 0 30px rgba(0, 212, 255, 0.3),
+      0 0 60px rgba(106, 90, 255, 0.2),
+      inset 0 2px 20px rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    box-shadow: 
+      0 0 40px rgba(0, 212, 255, 0.4),
+      0 0 80px rgba(106, 90, 255, 0.3),
+      inset 0 2px 25px rgba(255, 255, 255, 0.4);
+  }
+}
+
+/* Ensure video loads properly */
+video {
+  background: transparent;
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .animate-mesh {
+    background-size: 150% 150%;
+  }
+  
+  .orb-pulse {
+    filter: blur(40px);
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .logo-video {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
