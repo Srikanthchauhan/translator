@@ -23,7 +23,8 @@ export function useAudioStream() {
 
   // Initialize WebSocket
   const connectWebSocket = useCallback(() => {
-    const wsUrl = 'ws://localhost:8000/ws/translate';
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+    const wsUrl = apiUrl.replace('http', 'ws') + '/ws/translate';
     const ws = new WebSocket(wsUrl);
     ws.binaryType = 'arraybuffer';
 
