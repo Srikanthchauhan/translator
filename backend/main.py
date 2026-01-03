@@ -22,6 +22,7 @@ app = FastAPI(title="Vani AI API", version="1.0.0")
 ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "https://vani-translator.vercel.app",  # Your specific domain
     "https://*.vercel.app",  # All Vercel apps
     "https://*.onrender.com",  # Render.com apps
     os.getenv("FRONTEND_URL", "http://localhost:3000")
